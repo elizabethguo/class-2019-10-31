@@ -1,0 +1,57 @@
+---
+title: "Trains"
+author: "Elizabeth Guo"
+date: "10/31/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyr)
+library(readr)
+library(purrr)
+library(tibble)
+library(stringr)
+library(forcats)
+library(moderndive)
+library(infer)
+library(googlesheets4)
+library(fs)
+library(scales)
+library(gt)
+library(tidyverse)
+```
+
+```{r, message = FALSE}
+sheets_deauth()
+
+x <- read_sheet("1QV7o63fiZdNtMtLQfdwREapf8eYDjpfSRX0dgfNrB8A")
+```
+
+```{r}
+x %>% 
+  ggplot(aes(att_start)) +
+  geom_histogram(binwidth = 1)
+```
+```{r}
+x %>% 
+  ggplot(aes(x = age, y = att_start)) +
+  geom_jitter()
+```
+
+```{r}
+x$liberal <- as.factor(x$liberal)
+
+x %>% 
+  group_by(liberal) %>% 
+  summarise(avg = mean(att_start)) %>% 
+  ggplot(aes(x = liberal, y = avg)) +
+  geom_col()
+```
+
+```{r}
+x %>% 
+  ggplot(aes(as.factor(liberal), att_start)) +
+  geom_boxplot()
+```
+
